@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+CLI_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+if [ "$1" == "" ]; then
+    echo "Usage:
+
+$(basename "$0") <source file or directory> <destination directory>
+    For example: $(basename "$0") dir1 dir2
+    Will get dir2/dir1
+" >&2
+    exit 9
+fi
+
+DIST="$CLI_DIR/../$2"
+if [ ! -d "$DIST" ]; then
+    mkdir -p "$DIST"
+fi
+
+if [ -d "$1" ]; then
+    (set -x && cp -r -p "$1" "$DIST")
+elif [ -f "$1" ]; then
+    (set -x && cp -p "$1" "$DIST")
+else
+    echo "Error: $1 is not a file or directory" >&2
+    exit 1
+fi
+
+cd "$CLI_DIR/.."
+TARGET="$2/$(basename "$1")"
+set -x
+git add "$TARGET"
+git commit -m "update $TARGET"
+git push
