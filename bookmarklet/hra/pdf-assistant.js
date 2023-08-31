@@ -33,7 +33,7 @@ button {
     position: absolute;
     color: gray;
     font-size: 0.9em;
-	font-family: Arial Narrow;
+	font-family: Arial;
 	line-height: 1.8em;
 	text-align: right;
 }
